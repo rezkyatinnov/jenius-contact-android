@@ -1,12 +1,17 @@
 package com.rezkyatinnov.jeniuscontact.ui.detail
 
+import android.content.Intent
+import android.view.View
 import androidx.lifecycle.MutableLiveData
+import com.afollestad.materialdialogs.MaterialDialog
+import com.rezkyatinnov.jeniuscontact.R
 import com.rezkyatinnov.jeniuscontact.model.Contact
 import com.rezkyatinnov.jeniuscontact.restapi.ApiResponse
 import com.rezkyatinnov.jeniuscontact.restapi.ErrorResponse
 import com.rezkyatinnov.jeniuscontact.restapi.RestApi
 import com.rezkyatinnov.jeniuscontact.restapi.RestSubscriber
 import com.rezkyatinnov.jeniuscontact.ui.BaseViewModel
+import com.rezkyatinnov.jeniuscontact.ui.createupdatecontact.CreateUpdateContactActivity
 import okhttp3.Headers
 
 /**
@@ -20,6 +25,7 @@ class DetailViewModel(var activity: DetailActivity):BaseViewModel(activity),
     val lastname = MutableLiveData<String>()
     val age = MutableLiveData<String>()
     val avatar = MutableLiveData<String>()
+    var id = ""
 
     fun loadContactDetail(id:String){
         RestApi.call(
@@ -40,8 +46,16 @@ class DetailViewModel(var activity: DetailActivity):BaseViewModel(activity),
         firstname.value = body.data!!.firstName
         lastname.value = body.data!!.lastName
         age.value = (body.data!!.age?:0).toString() + " yo"
+        id = body.data!!.id?:""
     }
 
     override fun onFailed(error: ErrorResponse) {
+    }
+
+    val onUpdateClickListener = View.OnClickListener {
+        val intent = Intent(activity,CreateUpdateContactActivity::class.java)
+        intent.putExtra("id",id)
+        intent.putExtra("isUpdate",true)
+        activity.startActivity(intent)
     }
 }

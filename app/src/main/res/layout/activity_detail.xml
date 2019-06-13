@@ -95,6 +95,7 @@
                 android:layout_marginTop="@dimen/activity_vertical_margin"
                 android:backgroundTint="@color/colorPrimaryLight"
                 android:text="@string/update"
+                app:onClickListener="@{viewModel.onUpdateClickListener}"
                 tools:ignore="UnusedAttribute" />
 
             <Button

@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.rezkyatinnov.jeniuscontact.ui.addcontact.AddContactViewModel" />
+            type="com.rezkyatinnov.jeniuscontact.ui.createupdatecontact.CreateUpdateContactViewModel" />
     </data>
 
     <LinearLayout
@@ -16,8 +16,8 @@
         android:orientation="vertical">
 
         <com.google.android.material.appbar.AppBarLayout
-            android:layout_height="wrap_content"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:theme="@style/AppTheme.AppBarOverlay">
 
             <androidx.appcompat.widget.Toolbar
@@ -25,9 +25,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay"/>
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         </com.google.android.material.appbar.AppBarLayout>
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -65,6 +66,7 @@
                         android:imeOptions="actionNext"
                         android:inputType="textUri"
                         android:textSize="18sp"
+                        app:mutableText="@{viewModel.avatarMutable}"
                         app:textChangedListener="@{viewModel.avatarTextChangeListener}" />
                 </LinearLayout>
 
@@ -87,6 +89,7 @@
                         android:imeOptions="actionNext"
                         android:inputType="textPersonName"
                         android:textSize="18sp"
+                        app:mutableText="@{viewModel.firstnameMutable}"
                         app:textChangedListener="@{viewModel.firstnameTextChangeListener}" />
                 </LinearLayout>
 
@@ -109,6 +112,7 @@
                         android:imeOptions="actionNext"
                         android:inputType="textPersonName"
                         android:textSize="18sp"
+                        app:mutableText="@{viewModel.lastnameMutable}"
                         app:textChangedListener="@{viewModel.lastnameTextChangeListener}" />
                 </LinearLayout>
 
@@ -131,6 +135,7 @@
                         android:imeOptions="actionDone"
                         android:inputType="number"
                         android:textSize="18sp"
+                        app:mutableText="@{viewModel.ageMutable}"
                         app:textChangedListener="@{viewModel.ageTextChangeListener}" />
                 </LinearLayout>
 
@@ -140,8 +145,8 @@
                     android:layout_marginTop="@dimen/activity_vertical_margin"
                     android:backgroundTint="@color/colorPrimaryLight"
                     android:text="@string/save"
-                    tools:ignore="UnusedAttribute"
-                    app:onClickListener="@{viewModel.onSaveClickListener}"/>
+                    app:onClickListener="@{viewModel.onSaveClickListener}"
+                    tools:ignore="UnusedAttribute" />
 
             </LinearLayout>
         </ScrollView>
