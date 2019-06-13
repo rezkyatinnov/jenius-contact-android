@@ -13,6 +13,9 @@ import android.text.TextWatcher
 import android.webkit.WebView
 import android.widget.*
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
+import com.bumptech.glide.request.RequestOptions
+import com.rezkyatinnov.jeniuscontact.R
 
 /**
  * Created by rezkyatinnov on 13/06/2019.
@@ -79,7 +82,12 @@ fun loadMutableImage(view: ImageView, mutableUrl: MutableLiveData<String>?) {
         mutableUrl.observe(parentActivity, Observer { value ->
             val url = value ?: ""
             if (!url.isBlank()) {
-                Glide.with(view.context).load(value).into(view)
+                Glide.with(view.context)
+                    .load(value)
+                    .apply(
+                        RequestOptions().placeholder(R.drawable.ic_launcher_round).fitCenter().transform(CircleCrop())
+                    )
+                    .into(view)
             }
         })
     }

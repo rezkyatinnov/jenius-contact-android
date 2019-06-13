@@ -13,6 +13,10 @@ import com.rezkyatinnov.jeniuscontact.ui.BaseActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
+/**
+ * Created by rezkyatinnov on 13/06/2019.
+ */
+
 class MainActivity : BaseActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
