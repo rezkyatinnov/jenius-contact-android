@@ -58,4 +58,45 @@ class DetailViewModel(var activity: DetailActivity):BaseViewModel(activity),
         intent.putExtra("isUpdate",true)
         activity.startActivity(intent)
     }
+
+    val onDeleteClickListener = View.OnClickListener {
+        MaterialDialog(activity).show {
+            message(null, "Are You sure you want to delete this contact?")
+            cancelable(false)
+            cancelOnTouchOutside(false)
+            negativeButton(null,"CANCEL"){ dismiss() }
+            positiveButton(null,"YES"){
+                RestApi.call(
+                    disposables,
+                    apiServices.deleteContact(id),
+                    object:RestSubscriber<ApiResponse<Void>>{
+                        override fun onRestCallStart() {
+                        }
+
+                        override fun onRestCallFinish() {
+                        }
+
+                        override fun onSuccess(headers: Headers, body: ApiResponse<Void>?) {
+                            MaterialDialog(activity).show {
+                                message(null,body!!.message)
+                                cancelable(false)
+                                cancelOnTouchOutside(false)
+                                positiveButton { activity.finish() }
+                            }
+                        }
+
+                        override fun onFailed(error: ErrorResponse) {
+                            MaterialDialog(activity).show {
+                                message(null,error.message)
+                                cancelable(false)
+                                cancelOnTouchOutside(false)
+                                positiveButton { dismiss() }
+                            }
+                        }
+
+                    }
+                )
+            }
+        }
+    }
 }

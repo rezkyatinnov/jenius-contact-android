@@ -21,4 +21,7 @@ interface ApiServices {
 
     @PUT(ApiUrl.CONTACT_BY_ID)
     fun putContact(@Path("id") id:String, @Body contact: Contact): Observable<Response<ApiResponse<Contact>>>
+
+    @DELETE(ApiUrl.CONTACT_BY_ID)
+    fun deleteContact(@Path("id") id:String): Observable<Response<ApiResponse<Void>>>
 }
