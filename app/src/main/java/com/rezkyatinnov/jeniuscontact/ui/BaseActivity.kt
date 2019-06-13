@@ -7,6 +7,7 @@ import com.rezkyatinnov.jeniuscontact.injection.AppComponent
 import com.rezkyatinnov.jeniuscontact.injection.AppModule
 import com.rezkyatinnov.jeniuscontact.injection.DaggerAppComponent
 import com.rezkyatinnov.jeniuscontact.restapi.RestapiModule
+import com.rezkyatinnov.jeniuscontact.ui.detail.DetailActivity
 import com.rezkyatinnov.jeniuscontact.ui.main.MainActivity
 
 /**
@@ -32,6 +33,7 @@ open class BaseActivity : AppCompatActivity() {
     private fun inject() {
         when (this) {
             is MainActivity -> appComponent.inject(this)
+            is DetailActivity -> appComponent.inject(this)
         }
     }
 }
