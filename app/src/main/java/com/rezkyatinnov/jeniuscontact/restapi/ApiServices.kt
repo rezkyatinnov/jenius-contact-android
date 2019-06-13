@@ -12,4 +12,7 @@ import retrofit2.http.*
 interface ApiServices {
     @GET(ApiUrl.CONTACT)
     fun getContacts(): Observable<Response<ApiResponse<ArrayList<Contact>>>>
+
+    @GET(ApiUrl.CONTACT_BY_ID)
+    fun getContact(@Path("id") id:String): Observable<Response<ApiResponse<Contact>>>
 }

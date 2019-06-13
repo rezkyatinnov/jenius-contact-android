@@ -16,7 +16,8 @@ import okhttp3.Headers
  * Created by rezkyatinnov on 13/06/2019.
  */
 
-class MainViewModel(var activity: MainActivity):BaseViewModel(activity),RestSubscriber<ApiResponse<ArrayList<Contact>>> {
+class MainViewModel(var activity: MainActivity) : BaseViewModel(activity),
+    RestSubscriber<ApiResponse<ArrayList<Contact>>> {
 
     val mainListAdapter = MainListAdapter(activity, ArrayList())
     val layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
@@ -29,12 +30,12 @@ class MainViewModel(var activity: MainActivity):BaseViewModel(activity),RestSubs
         loadAllContact()
     }
 
-    fun loadAllContact(){
+    fun loadAllContact() {
         RestApi.call(
             disposables,
             apiServices.getContacts(),
             this
-            )
+        )
     }
 
     override fun onRestCallStart() {

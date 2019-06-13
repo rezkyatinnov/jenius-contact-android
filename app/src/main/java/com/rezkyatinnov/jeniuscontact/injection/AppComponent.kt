@@ -1,6 +1,8 @@
 package com.rezkyatinnov.jeniuscontact.injection
 
 import com.rezkyatinnov.jeniuscontact.restapi.RestapiModule
+import com.rezkyatinnov.jeniuscontact.ui.detail.DetailActivity
+import com.rezkyatinnov.jeniuscontact.ui.detail.DetailViewModel
 import com.rezkyatinnov.jeniuscontact.ui.main.MainActivity
 import com.rezkyatinnov.jeniuscontact.ui.main.MainViewModel
 import dagger.Component
@@ -16,6 +18,9 @@ interface AppComponent {
 
     fun inject(activity: MainActivity)
     fun inject(viewModel: MainViewModel)
+
+    fun inject(activity: DetailActivity)
+    fun inject(viewModel: DetailViewModel)
 
     @Component.Builder
     interface Builder {
