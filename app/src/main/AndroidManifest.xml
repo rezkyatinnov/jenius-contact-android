@@ -35,7 +35,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
         <activity
-            android:name=".ui.addcontact.AddContactActivity"
+            android:name=".ui.createupdatecontact.CreateUpdateContactActivity"
             android:label="@string/addcontact"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />

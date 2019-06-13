@@ -2,16 +2,13 @@ package com.rezkyatinnov.jeniuscontact.ui.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
-import com.google.android.material.snackbar.Snackbar
 import com.rezkyatinnov.jeniuscontact.R
 import com.rezkyatinnov.jeniuscontact.databinding.ActivityMainBinding
 import com.rezkyatinnov.jeniuscontact.injection.ViewModelFactory
 import com.rezkyatinnov.jeniuscontact.ui.BaseActivity
-import com.rezkyatinnov.jeniuscontact.ui.addcontact.AddContactActivity
+import com.rezkyatinnov.jeniuscontact.ui.createupdatecontact.CreateUpdateContactActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
@@ -35,7 +32,7 @@ class MainActivity : BaseActivity() {
         binding.viewModel = viewModel
 
         fab.setOnClickListener { view ->
-            val intent = Intent(this@MainActivity,AddContactActivity::class.java)
+            val intent = Intent(this@MainActivity,CreateUpdateContactActivity::class.java)
             startActivity(intent)
         }
     }
