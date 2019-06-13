@@ -15,4 +15,7 @@ interface ApiServices {
 
     @GET(ApiUrl.CONTACT_BY_ID)
     fun getContact(@Path("id") id:String): Observable<Response<ApiResponse<Contact>>>
+
+    @POST(ApiUrl.CONTACT)
+    fun postContact(@Body contact: Contact): Observable<Response<ApiResponse<Void>>>
 }

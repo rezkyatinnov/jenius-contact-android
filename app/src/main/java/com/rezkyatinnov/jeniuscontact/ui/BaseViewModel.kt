@@ -2,6 +2,7 @@ package com.rezkyatinnov.jeniuscontact.ui
 
 import androidx.lifecycle.ViewModel
 import com.rezkyatinnov.jeniuscontact.restapi.ApiServices
+import com.rezkyatinnov.jeniuscontact.ui.addcontact.AddContactViewModel
 import com.rezkyatinnov.jeniuscontact.ui.detail.DetailViewModel
 import com.rezkyatinnov.jeniuscontact.ui.main.MainViewModel
 import io.reactivex.disposables.CompositeDisposable
@@ -31,6 +32,7 @@ abstract class BaseViewModel(var baseActivity: BaseActivity):ViewModel(){
         when (this) {
             is MainViewModel -> baseActivity.appComponent.inject(this)
             is DetailViewModel -> baseActivity.appComponent.inject(this)
+            is AddContactViewModel -> baseActivity.appComponent.inject(this)
         }
     }
 

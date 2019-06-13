@@ -1,5 +1,6 @@
 package com.rezkyatinnov.jeniuscontact.ui.main
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -10,6 +11,7 @@ import com.rezkyatinnov.jeniuscontact.R
 import com.rezkyatinnov.jeniuscontact.databinding.ActivityMainBinding
 import com.rezkyatinnov.jeniuscontact.injection.ViewModelFactory
 import com.rezkyatinnov.jeniuscontact.ui.BaseActivity
+import com.rezkyatinnov.jeniuscontact.ui.addcontact.AddContactActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
@@ -33,8 +35,8 @@ class MainActivity : BaseActivity() {
         binding.viewModel = viewModel
 
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+            val intent = Intent(this@MainActivity,AddContactActivity::class.java)
+            startActivity(intent)
         }
     }
 }
