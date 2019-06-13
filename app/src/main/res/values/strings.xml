@@ -7,4 +7,8 @@
     <string name="update">Update</string>
     <string name="delete">Delete</string>
     <string name="profile">Profile</string>
+    <string name="addcontact">Add Contact</string>
+    <string name="avatar_url">Avatar URL</string>
+    <string name="save">save</string>
+    <string name="fill_all_fields">Please fill all the fields!</string>
 </resources>
