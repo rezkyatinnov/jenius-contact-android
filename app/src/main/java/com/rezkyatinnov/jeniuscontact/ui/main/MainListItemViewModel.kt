@@ -28,7 +28,7 @@ class MainListItemViewModel(var activity: MainActivity):BaseViewModel(activity){
     var onItemClickListener = View.OnClickListener {
         val intent = Intent(activity, DetailActivity::class.java)
         intent.putExtra("id", contact.id)
-        activity.startActivity(intent)
+        activity.startActivityForResult(intent,MainActivity.IS_NEED_RELOAD)
     }
 
 }

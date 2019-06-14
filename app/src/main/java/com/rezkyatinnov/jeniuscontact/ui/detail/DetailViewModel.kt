@@ -1,10 +1,10 @@
 package com.rezkyatinnov.jeniuscontact.ui.detail
 
+import android.app.Activity
 import android.content.Intent
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import com.afollestad.materialdialogs.MaterialDialog
-import com.rezkyatinnov.jeniuscontact.R
 import com.rezkyatinnov.jeniuscontact.model.Contact
 import com.rezkyatinnov.jeniuscontact.restapi.ApiResponse
 import com.rezkyatinnov.jeniuscontact.restapi.ErrorResponse
@@ -12,6 +12,7 @@ import com.rezkyatinnov.jeniuscontact.restapi.RestApi
 import com.rezkyatinnov.jeniuscontact.restapi.RestSubscriber
 import com.rezkyatinnov.jeniuscontact.ui.BaseViewModel
 import com.rezkyatinnov.jeniuscontact.ui.createupdatecontact.CreateUpdateContactActivity
+import com.rezkyatinnov.jeniuscontact.ui.main.MainActivity
 import okhttp3.Headers
 
 /**
@@ -21,11 +22,17 @@ import okhttp3.Headers
 class DetailViewModel(var activity: DetailActivity):BaseViewModel(activity),
     RestSubscriber<ApiResponse<Contact>> {
 
+    var loadingVisibility = MutableLiveData<Int>()
+
     val firstname = MutableLiveData<String>()
     val lastname = MutableLiveData<String>()
     val age = MutableLiveData<String>()
     val avatar = MutableLiveData<String>()
     var id = ""
+
+    init {
+        loadingVisibility.value = View.GONE
+    }
 
     fun loadContactDetail(id:String){
         RestApi.call(
@@ -36,12 +43,15 @@ class DetailViewModel(var activity: DetailActivity):BaseViewModel(activity),
     }
 
     override fun onRestCallStart() {
+        loadingVisibility.value = View.VISIBLE
     }
 
     override fun onRestCallFinish() {
+        loadingVisibility.value = View.GONE
     }
 
     override fun onSuccess(headers: Headers, body: ApiResponse<Contact>?) {
+        loadingVisibility.value = View.GONE
         avatar.value = body!!.data!!.photo
         firstname.value = body.data!!.firstName
         lastname.value = body.data!!.lastName
@@ -50,13 +60,20 @@ class DetailViewModel(var activity: DetailActivity):BaseViewModel(activity),
     }
 
     override fun onFailed(error: ErrorResponse) {
+        loadingVisibility.value = View.GONE
+        MaterialDialog(activity).show {
+            message(null, error.message)
+            positiveButton {
+                activity.finish()
+            }
+        }
     }
 
     val onUpdateClickListener = View.OnClickListener {
         val intent = Intent(activity,CreateUpdateContactActivity::class.java)
         intent.putExtra("id",id)
         intent.putExtra("isUpdate",true)
-        activity.startActivity(intent)
+        activity.startActivityForResult(intent,MainActivity.IS_NEED_RELOAD)
     }
 
     val onDeleteClickListener = View.OnClickListener {
@@ -81,7 +98,11 @@ class DetailViewModel(var activity: DetailActivity):BaseViewModel(activity),
                                 message(null,body!!.message)
                                 cancelable(false)
                                 cancelOnTouchOutside(false)
-                                positiveButton { activity.finish() }
+                                positiveButton {
+                                    val resultIntent = Intent()
+                                    activity.setResult(Activity.RESULT_OK, resultIntent)
+                                    activity.finish()
+                                }
                             }
                         }
 

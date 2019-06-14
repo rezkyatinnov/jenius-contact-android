@@ -1,5 +1,7 @@
 package com.rezkyatinnov.jeniuscontact.ui.createupdatecontact
 
+import android.app.Activity
+import android.content.Intent
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -21,6 +23,8 @@ import okhttp3.Headers
 class CreateUpdateContactViewModel(var activity: CreateUpdateContactActivity) : BaseViewModel(activity),
     RestSubscriber<ApiResponse<Void>> {
 
+    var loadingVisibility = MutableLiveData<Int>()
+
     var avatar = MutableLiveData<String>()
     var firstname = ""
     var lastname = ""
@@ -29,6 +33,10 @@ class CreateUpdateContactViewModel(var activity: CreateUpdateContactActivity) : 
     var firstnameMutable = MutableLiveData<String>()
     var lastnameMutable = MutableLiveData<String>()
     var ageMutable = MutableLiveData<String>()
+
+    init {
+        loadingVisibility.value = View.GONE
+    }
 
     val avatarTextChangeListener = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
@@ -97,12 +105,15 @@ class CreateUpdateContactViewModel(var activity: CreateUpdateContactActivity) : 
             apiServices.getContact(id),
             object : RestSubscriber<ApiResponse<Contact>> {
                 override fun onRestCallStart() {
+                    loadingVisibility.value = View.VISIBLE
                 }
 
                 override fun onRestCallFinish() {
+                    loadingVisibility.value = View.GONE
                 }
 
                 override fun onSuccess(headers: Headers, body: ApiResponse<Contact>?) {
+                    loadingVisibility.value = View.GONE
                     avatarMutable.value = body!!.data!!.photo
                     avatar.value = body.data!!.photo
                     firstnameMutable.value = body.data!!.firstName
@@ -111,6 +122,14 @@ class CreateUpdateContactViewModel(var activity: CreateUpdateContactActivity) : 
                 }
 
                 override fun onFailed(error: ErrorResponse) {
+                    loadingVisibility.value = View.GONE
+                    MaterialDialog(activity).show {
+                        message(null, error.message)
+                        positiveButton {
+                            dismiss()
+                            activity.finish()
+                        }
+                    }
                 }
 
             }
@@ -130,15 +149,20 @@ class CreateUpdateContactViewModel(var activity: CreateUpdateContactActivity) : 
                 apiServices.putContact(activity.id, contact),
                 object : RestSubscriber<ApiResponse<Contact>> {
                     override fun onRestCallStart() {
+                        loadingVisibility.value = View.VISIBLE
                     }
 
                     override fun onRestCallFinish() {
+                        loadingVisibility.value = View.GONE
                     }
 
                     override fun onSuccess(headers: Headers, body: ApiResponse<Contact>?) {
+                        loadingVisibility.value = View.GONE
                         MaterialDialog(activity).show {
                             message(null, body!!.message)
                             positiveButton {
+                                val resultIntent = Intent()
+                                activity.setResult(Activity.RESULT_OK, resultIntent)
                                 activity.finish()
                             }
                             cancelOnTouchOutside(false)
@@ -147,6 +171,7 @@ class CreateUpdateContactViewModel(var activity: CreateUpdateContactActivity) : 
                     }
 
                     override fun onFailed(error: ErrorResponse) {
+                        loadingVisibility.value = View.GONE
                         MaterialDialog(activity).show {
                             message(null, error.message)
                             positiveButton {
@@ -171,15 +196,20 @@ class CreateUpdateContactViewModel(var activity: CreateUpdateContactActivity) : 
     }
 
     override fun onRestCallStart() {
+        loadingVisibility.value = View.VISIBLE
     }
 
     override fun onRestCallFinish() {
+        loadingVisibility.value = View.GONE
     }
 
     override fun onSuccess(headers: Headers, body: ApiResponse<Void>?) {
+        loadingVisibility.value = View.GONE
         MaterialDialog(activity).show {
             message(null, body!!.message)
             positiveButton {
+                val resultIntent = Intent()
+                activity.setResult(Activity.RESULT_OK, resultIntent)
                 activity.finish()
             }
             cancelOnTouchOutside(false)
@@ -188,6 +218,7 @@ class CreateUpdateContactViewModel(var activity: CreateUpdateContactActivity) : 
     }
 
     override fun onFailed(error: ErrorResponse) {
+        loadingVisibility.value = View.GONE
         MaterialDialog(activity).show {
             message(null, error.message)
             positiveButton {
