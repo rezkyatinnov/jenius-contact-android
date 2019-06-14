@@ -1,10 +1,10 @@
 package com.rezkyatinnov.jeniuscontact.ui.detail
 
+import android.app.Activity
 import android.content.Intent
 import android.view.View
 import androidx.lifecycle.MutableLiveData
 import com.afollestad.materialdialogs.MaterialDialog
-import com.rezkyatinnov.jeniuscontact.R
 import com.rezkyatinnov.jeniuscontact.model.Contact
 import com.rezkyatinnov.jeniuscontact.restapi.ApiResponse
 import com.rezkyatinnov.jeniuscontact.restapi.ErrorResponse
@@ -12,6 +12,7 @@ import com.rezkyatinnov.jeniuscontact.restapi.RestApi
 import com.rezkyatinnov.jeniuscontact.restapi.RestSubscriber
 import com.rezkyatinnov.jeniuscontact.ui.BaseViewModel
 import com.rezkyatinnov.jeniuscontact.ui.createupdatecontact.CreateUpdateContactActivity
+import com.rezkyatinnov.jeniuscontact.ui.main.MainActivity
 import okhttp3.Headers
 
 /**
@@ -56,7 +57,7 @@ class DetailViewModel(var activity: DetailActivity):BaseViewModel(activity),
         val intent = Intent(activity,CreateUpdateContactActivity::class.java)
         intent.putExtra("id",id)
         intent.putExtra("isUpdate",true)
-        activity.startActivity(intent)
+        activity.startActivityForResult(intent,MainActivity.IS_NEED_RELOAD)
     }
 
     val onDeleteClickListener = View.OnClickListener {
@@ -81,7 +82,11 @@ class DetailViewModel(var activity: DetailActivity):BaseViewModel(activity),
                                 message(null,body!!.message)
                                 cancelable(false)
                                 cancelOnTouchOutside(false)
-                                positiveButton { activity.finish() }
+                                positiveButton {
+                                    val resultIntent = Intent()
+                                    activity.setResult(Activity.RESULT_OK, resultIntent)
+                                    activity.finish()
+                                }
                             }
                         }
 

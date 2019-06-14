@@ -1,5 +1,7 @@
 package com.rezkyatinnov.jeniuscontact.ui.createupdatecontact
 
+import android.app.Activity
+import android.content.Intent
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -139,6 +141,8 @@ class CreateUpdateContactViewModel(var activity: CreateUpdateContactActivity) : 
                         MaterialDialog(activity).show {
                             message(null, body!!.message)
                             positiveButton {
+                                val resultIntent = Intent()
+                                activity.setResult(Activity.RESULT_OK, resultIntent)
                                 activity.finish()
                             }
                             cancelOnTouchOutside(false)
@@ -180,6 +184,8 @@ class CreateUpdateContactViewModel(var activity: CreateUpdateContactActivity) : 
         MaterialDialog(activity).show {
             message(null, body!!.message)
             positiveButton {
+                val resultIntent = Intent()
+                activity.setResult(Activity.RESULT_OK, resultIntent)
                 activity.finish()
             }
             cancelOnTouchOutside(false)

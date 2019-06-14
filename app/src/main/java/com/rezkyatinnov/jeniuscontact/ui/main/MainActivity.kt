@@ -1,5 +1,6 @@
 package com.rezkyatinnov.jeniuscontact.ui.main
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
@@ -33,7 +34,20 @@ class MainActivity : BaseActivity() {
 
         fab.setOnClickListener { view ->
             val intent = Intent(this@MainActivity,CreateUpdateContactActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, IS_NEED_RELOAD)
         }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode==1001){
+            if(resultCode== Activity.RESULT_OK){
+                viewModel.loadAllContact()
+            }
+        }
+    }
+
+    companion object {
+        val IS_NEED_RELOAD = 1001
     }
 }
