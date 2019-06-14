@@ -22,11 +22,17 @@ import okhttp3.Headers
 class DetailViewModel(var activity: DetailActivity):BaseViewModel(activity),
     RestSubscriber<ApiResponse<Contact>> {
 
+    var loadingVisibility = MutableLiveData<Int>()
+
     val firstname = MutableLiveData<String>()
     val lastname = MutableLiveData<String>()
     val age = MutableLiveData<String>()
     val avatar = MutableLiveData<String>()
     var id = ""
+
+    init {
+        loadingVisibility.value = View.GONE
+    }
 
     fun loadContactDetail(id:String){
         RestApi.call(
@@ -37,12 +43,15 @@ class DetailViewModel(var activity: DetailActivity):BaseViewModel(activity),
     }
 
     override fun onRestCallStart() {
+        loadingVisibility.value = View.VISIBLE
     }
 
     override fun onRestCallFinish() {
+        loadingVisibility.value = View.GONE
     }
 
     override fun onSuccess(headers: Headers, body: ApiResponse<Contact>?) {
+        loadingVisibility.value = View.GONE
         avatar.value = body!!.data!!.photo
         firstname.value = body.data!!.firstName
         lastname.value = body.data!!.lastName
@@ -51,6 +60,13 @@ class DetailViewModel(var activity: DetailActivity):BaseViewModel(activity),
     }
 
     override fun onFailed(error: ErrorResponse) {
+        loadingVisibility.value = View.GONE
+        MaterialDialog(activity).show {
+            message(null, error.message)
+            positiveButton {
+                activity.finish()
+            }
+        }
     }
 
     val onUpdateClickListener = View.OnClickListener {
