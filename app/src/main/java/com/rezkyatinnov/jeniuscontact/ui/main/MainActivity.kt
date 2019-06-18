@@ -17,7 +17,7 @@ import javax.inject.Inject
  * Created by rezkyatinnov on 13/06/2019.
  */
 
-class MainActivity : BaseActivity() {
+open class MainActivity : BaseActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 

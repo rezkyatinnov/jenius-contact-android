@@ -1,7 +1,10 @@
 package com.rezkyatinnov.jeniuscontact.ui
 
 import androidx.lifecycle.ViewModel
+import com.rezkyatinnov.jeniuscontact.injection.AppModule
+import com.rezkyatinnov.jeniuscontact.injection.DaggerAppComponent
 import com.rezkyatinnov.jeniuscontact.restapi.ApiServices
+import com.rezkyatinnov.jeniuscontact.restapi.RestapiModule
 import com.rezkyatinnov.jeniuscontact.ui.createupdatecontact.CreateUpdateContactViewModel
 import com.rezkyatinnov.jeniuscontact.ui.detail.DetailViewModel
 import com.rezkyatinnov.jeniuscontact.ui.main.MainViewModel
@@ -14,6 +17,7 @@ import javax.inject.Inject
 
 
 abstract class BaseViewModel(var baseActivity: BaseActivity):ViewModel(){
+    var appComponent =  DaggerAppComponent.builder().appModule(AppModule(baseActivity)).restapiModule(RestapiModule(baseActivity)).build()
 
     @Inject
     lateinit var apiServices: ApiServices
@@ -30,9 +34,9 @@ abstract class BaseViewModel(var baseActivity: BaseActivity):ViewModel(){
 
     private fun inject() {
         when (this) {
-            is MainViewModel -> baseActivity.appComponent.inject(this)
-            is DetailViewModel -> baseActivity.appComponent.inject(this)
-            is CreateUpdateContactViewModel -> baseActivity.appComponent.inject(this)
+            is MainViewModel -> appComponent.inject(this)
+            is DetailViewModel -> appComponent.inject(this)
+            is CreateUpdateContactViewModel -> appComponent.inject(this)
         }
     }
 
