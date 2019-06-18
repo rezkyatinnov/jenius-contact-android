@@ -32,10 +32,15 @@ open class MainActivity : BaseActivity() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
         binding.viewModel = viewModel
 
-        fab.setOnClickListener { view ->
+        fab.setOnClickListener {
             val intent = Intent(this@MainActivity,CreateUpdateContactActivity::class.java)
             startActivityForResult(intent, IS_NEED_RELOAD)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.loadAllContact()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

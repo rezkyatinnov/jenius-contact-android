@@ -26,10 +26,6 @@ class MainViewModel(var activity: MainActivity) : BaseViewModel(activity),
         loadAllContact()
     }
 
-    init {
-        loadAllContact()
-    }
-
     fun loadAllContact() {
         RestApi.call(
             disposables,

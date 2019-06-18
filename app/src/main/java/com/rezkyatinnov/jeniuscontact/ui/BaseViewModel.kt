@@ -22,7 +22,7 @@ abstract class BaseViewModel(var baseActivity: BaseActivity):ViewModel(){
     @Inject
     lateinit var apiServices: ApiServices
 
-    val disposables = CompositeDisposable()
+    var disposables = CompositeDisposable()
 
     init {
         inject()

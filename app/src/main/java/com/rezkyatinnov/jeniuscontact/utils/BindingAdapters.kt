@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide
 import android.text.TextWatcher
 import android.webkit.WebView
 import android.widget.*
+import androidx.core.text.HtmlCompat
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
@@ -45,7 +46,10 @@ fun setMutableTextHtml(view: TextView, text: MutableLiveData<String>?) {
         text.observe(parentActivity, Observer { value ->
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 view.text = Html.fromHtml(value ?: "", Html.FROM_HTML_MODE_COMPACT)
-            } else view.text = Html.fromHtml(value ?: "")
+            } else {
+                @Suppress("DEPRECATION")
+                view.text = Html.fromHtml(value ?: "")
+            }
         })
     }
 }
@@ -85,7 +89,7 @@ fun loadMutableImage(view: ImageView, mutableUrl: MutableLiveData<String>?) {
                 Glide.with(view.context)
                     .load(value)
                     .apply(
-                        RequestOptions().placeholder(R.drawable.ic_launcher_round).fitCenter().transform(CircleCrop())
+                        RequestOptions().placeholder(R.mipmap.ic_launcher_round).fitCenter().transform(CircleCrop())
                     )
                     .into(view)
             }
