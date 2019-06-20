@@ -13,6 +13,8 @@ import com.rezkyatinnov.jeniuscontact.restapi.RestSubscriber
 import com.rezkyatinnov.jeniuscontact.ui.BaseViewModel
 import com.rezkyatinnov.jeniuscontact.ui.createupdatecontact.CreateUpdateContactActivity
 import com.rezkyatinnov.jeniuscontact.ui.main.MainActivity
+import com.rezkyatinnov.jeniuscontact.utils.BaseSchedulerProvider
+import com.rezkyatinnov.jeniuscontact.utils.SchedulerProvider
 import okhttp3.Headers
 
 /**
@@ -23,6 +25,7 @@ class DetailViewModel(var activity: DetailActivity):BaseViewModel(activity),
     RestSubscriber<ApiResponse<Contact>> {
 
     var loadingVisibility = MutableLiveData<Int>()
+    var schedulerProvider:BaseSchedulerProvider = SchedulerProvider()
 
     val firstname = MutableLiveData<String>()
     val lastname = MutableLiveData<String>()
@@ -38,7 +41,8 @@ class DetailViewModel(var activity: DetailActivity):BaseViewModel(activity),
         RestApi.call(
             disposables,
             apiServices.getContact(id),
-            this
+            this,
+            schedulerProvider
         )
     }
 
