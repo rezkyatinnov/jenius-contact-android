@@ -8,6 +8,8 @@ import com.rezkyatinnov.jeniuscontact.restapi.RestapiModule
 import com.rezkyatinnov.jeniuscontact.ui.createupdatecontact.CreateUpdateContactViewModel
 import com.rezkyatinnov.jeniuscontact.ui.detail.DetailViewModel
 import com.rezkyatinnov.jeniuscontact.ui.main.MainViewModel
+import com.rezkyatinnov.jeniuscontact.utils.BaseSchedulerProvider
+import com.rezkyatinnov.jeniuscontact.utils.SchedulerProvider
 import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
@@ -17,6 +19,8 @@ import javax.inject.Inject
 
 
 abstract class BaseViewModel(var baseActivity: BaseActivity):ViewModel(){
+
+    var schedulerProvider: BaseSchedulerProvider = SchedulerProvider()
     var appComponent =  DaggerAppComponent.builder().appModule(AppModule(baseActivity)).restapiModule(RestapiModule(baseActivity)).build()
 
     @Inject

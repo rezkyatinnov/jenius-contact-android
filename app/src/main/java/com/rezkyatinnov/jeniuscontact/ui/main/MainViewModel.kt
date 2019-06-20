@@ -10,13 +10,15 @@ import com.rezkyatinnov.jeniuscontact.restapi.ErrorResponse
 import com.rezkyatinnov.jeniuscontact.restapi.RestApi
 import com.rezkyatinnov.jeniuscontact.restapi.RestSubscriber
 import com.rezkyatinnov.jeniuscontact.ui.BaseViewModel
+import com.rezkyatinnov.jeniuscontact.utils.BaseSchedulerProvider
+import com.rezkyatinnov.jeniuscontact.utils.SchedulerProvider
 import okhttp3.Headers
 
 /**
  * Created by rezkyatinnov on 13/06/2019.
  */
 
-class MainViewModel(var activity: MainActivity) : BaseViewModel(activity),
+open class MainViewModel(var activity: MainActivity) : BaseViewModel(activity),
     RestSubscriber<ApiResponse<ArrayList<Contact>>> {
 
     val mainListAdapter = MainListAdapter(activity, ArrayList())
@@ -30,7 +32,8 @@ class MainViewModel(var activity: MainActivity) : BaseViewModel(activity),
         RestApi.call(
             disposables,
             apiServices.getContacts(),
-            this
+            this,
+            schedulerProvider
         )
     }
 

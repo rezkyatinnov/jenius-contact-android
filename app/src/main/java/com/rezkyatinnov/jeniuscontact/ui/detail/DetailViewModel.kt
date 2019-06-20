@@ -25,7 +25,6 @@ class DetailViewModel(var activity: DetailActivity):BaseViewModel(activity),
     RestSubscriber<ApiResponse<Contact>> {
 
     var loadingVisibility = MutableLiveData<Int>()
-    var schedulerProvider:BaseSchedulerProvider = SchedulerProvider()
 
     val firstname = MutableLiveData<String>()
     val lastname = MutableLiveData<String>()
