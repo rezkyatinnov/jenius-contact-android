@@ -1,5 +1,6 @@
 package com.rezkyatinnov.jeniuscontact
 
+import android.view.View
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.rezkyatinnov.jeniuscontact.model.Contact
 import com.rezkyatinnov.jeniuscontact.restapi.ApiResponse
@@ -71,7 +72,6 @@ class DetailViewModelTest {
         val mockResponse = Response.success(mockApiResponse)
         val observable = Observable.just(mockResponse)
 
-//        val testObserver = TestObserver<Response<ApiResponse<Contact>>>(detailViewModel)
         observable.doOnSubscribe { detailViewModel.onRestCallStart() }
             .doOnTerminate { detailViewModel.onRestCallFinish() }
             .subscribe(
@@ -89,5 +89,33 @@ class DetailViewModelTest {
         Assert.assertEquals(mockResponse.body()?.data?.lastName,detailViewModel.lastname.value)
         Assert.assertEquals(mockResponse.body()?.data?.photo,detailViewModel.avatar.value)
         Assert.assertEquals(mockResponse.body()?.data?.age.toString() + " yo",detailViewModel.age.value)
+    }
+
+    @Test
+    fun detailContactViewModelDeleteContactTest() {
+        val mockApiResponse = ApiResponse<Void>()
+        mockApiResponse.message = "success"
+        val mockResponse = Response.success(mockApiResponse)
+        val observable = Observable.just(mockResponse)
+
+        observable.doOnSubscribe {
+            detailViewModel.deleteContactRestSubscriber.onRestCallStart()
+            Assert.assertEquals(View.VISIBLE, detailViewModel.loadingVisibility.value)
+        }.doOnTerminate {
+            detailViewModel.deleteContactRestSubscriber.onRestCallFinish()
+            Assert.assertEquals(View.GONE, detailViewModel.loadingVisibility.value)
+        }.subscribe({ result ->
+            detailViewModel.deleteContactRestSubscriber.onRestCallSuccess(result)
+            Assert.assertEquals(View.GONE, detailViewModel.loadingVisibility.value)
+        }, { throwable ->
+            detailViewModel.deleteContactRestSubscriber.onRestCallError(throwable)
+            Assert.assertEquals(View.GONE, detailViewModel.loadingVisibility.value)
+        })
+
+        BDDMockito.given(detailViewModel.apiServices.deleteContact(detailViewModel.id)).willReturn(observable)
+
+        detailViewModel.deleteContact()
+        testScheduler.advanceTimeBy(3000, TimeUnit.MILLISECONDS)
+        Assert.assertEquals(View.GONE, detailViewModel.loadingVisibility.value)
     }
 }

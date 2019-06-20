@@ -77,6 +77,46 @@ class DetailViewModel(var activity: DetailActivity):BaseViewModel(activity),
         activity.startActivityForResult(intent,MainActivity.IS_NEED_RELOAD)
     }
 
+    val deleteContactRestSubscriber = object:RestSubscriber<ApiResponse<Void>>{
+        override fun onRestCallStart() {
+        }
+
+        override fun onRestCallFinish() {
+        }
+
+        override fun onSuccess(headers: Headers, body: ApiResponse<Void>?) {
+            MaterialDialog(activity).show {
+                message(null,body!!.message)
+                cancelable(false)
+                cancelOnTouchOutside(false)
+                positiveButton {
+                    val resultIntent = Intent()
+                    activity.setResult(Activity.RESULT_OK, resultIntent)
+                    activity.finish()
+                }
+            }
+        }
+
+        override fun onFailed(error: ErrorResponse) {
+            MaterialDialog(activity).show {
+                message(null,error.message)
+                cancelable(false)
+                cancelOnTouchOutside(false)
+                positiveButton { dismiss() }
+            }
+        }
+
+    }
+
+    fun deleteContact(){
+        RestApi.call(
+            disposables,
+            apiServices.deleteContact(id),
+            deleteContactRestSubscriber,
+            schedulerProvider
+        )
+    }
+
     val onDeleteClickListener = View.OnClickListener {
         MaterialDialog(activity).show {
             message(null, "Are You sure you want to delete this contact?")
@@ -84,41 +124,7 @@ class DetailViewModel(var activity: DetailActivity):BaseViewModel(activity),
             cancelOnTouchOutside(false)
             negativeButton(null,"CANCEL"){ dismiss() }
             positiveButton(null,"YES"){
-                RestApi.call(
-                    disposables,
-                    apiServices.deleteContact(id),
-                    object:RestSubscriber<ApiResponse<Void>>{
-                        override fun onRestCallStart() {
-                        }
-
-                        override fun onRestCallFinish() {
-                        }
-
-                        override fun onSuccess(headers: Headers, body: ApiResponse<Void>?) {
-                            MaterialDialog(activity).show {
-                                message(null,body!!.message)
-                                cancelable(false)
-                                cancelOnTouchOutside(false)
-                                positiveButton {
-                                    val resultIntent = Intent()
-                                    activity.setResult(Activity.RESULT_OK, resultIntent)
-                                    activity.finish()
-                                }
-                            }
-                        }
-
-                        override fun onFailed(error: ErrorResponse) {
-                            MaterialDialog(activity).show {
-                                message(null,error.message)
-                                cancelable(false)
-                                cancelOnTouchOutside(false)
-                                positiveButton { dismiss() }
-                            }
-                        }
-
-                    },
-                    schedulerProvider
-                )
+                deleteContact()
             }
         }
     }
