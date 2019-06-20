@@ -7,6 +7,13 @@ Clone this repository and import into **Android Studio**
 git@github.com:rezkyatinnov/jenius-contact-android.git
 ```
 
+## Screenshots
+![Home](./screenshots/home.jpg?raw=true "Home Screen")
+![Add Contact](./screenshots/add.jpg?raw=true "Add New Contact")
+![Contact Detail](./screenshots/viewdetail.jpg?raw=true "View Contact Detail")
+![Edit Contact](./screenshots/edit.jpg?raw=true "Edit Contact Detail")
+![Delete Contact](./screenshots/delete.jpg?raw=true "Delete Contact")
+
 ## Generating signed APK
 From Android Studio:
 1. ***Build*** menu
