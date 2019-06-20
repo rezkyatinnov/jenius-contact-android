@@ -13,8 +13,6 @@ import com.rezkyatinnov.jeniuscontact.restapi.RestSubscriber
 import com.rezkyatinnov.jeniuscontact.ui.BaseViewModel
 import com.rezkyatinnov.jeniuscontact.ui.createupdatecontact.CreateUpdateContactActivity
 import com.rezkyatinnov.jeniuscontact.ui.main.MainActivity
-import com.rezkyatinnov.jeniuscontact.utils.BaseSchedulerProvider
-import com.rezkyatinnov.jeniuscontact.utils.SchedulerProvider
 import okhttp3.Headers
 
 /**
@@ -118,7 +116,8 @@ class DetailViewModel(var activity: DetailActivity):BaseViewModel(activity),
                             }
                         }
 
-                    }
+                    },
+                    schedulerProvider
                 )
             }
         }

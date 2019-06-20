@@ -12,18 +12,6 @@ import retrofit2.Response
  */
 
 object RestApi {
-     fun <T> call(disposable: CompositeDisposable, observable: Observable<Response<T>>, restSubscriber: RestSubscriber<T>){
-         disposable.add(observable
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .doOnSubscribe { restSubscriber.onRestCallStart() }
-            .doOnTerminate { restSubscriber.onRestCallFinish() }
-            .subscribe(
-                { result -> restSubscriber.onRestCallSuccess(result) },
-                { throwable -> restSubscriber.onRestCallError(throwable) }
-            )
-        )
-    }
      fun <T> call(disposable: CompositeDisposable, observable: Observable<Response<T>>, restSubscriber: RestSubscriber<T>,schedulerProvider: BaseSchedulerProvider){
          disposable.add(observable
             .subscribeOn(schedulerProvider.io())
