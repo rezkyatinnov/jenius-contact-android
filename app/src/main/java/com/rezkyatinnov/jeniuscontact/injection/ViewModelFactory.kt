@@ -18,17 +18,14 @@ import javax.inject.Inject
 
 class ViewModelFactory @Inject constructor(var appCompatActivity: AppCompatActivity) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
+        when {
+            modelClass.isAssignableFrom(MainViewModel::class.java) -> @Suppress("UNCHECKED_CAST")
             return MainViewModel(appCompatActivity as MainActivity) as T
-        } else if(modelClass.isAssignableFrom(DetailViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
+            modelClass.isAssignableFrom(DetailViewModel::class.java) -> @Suppress("UNCHECKED_CAST")
             return DetailViewModel(appCompatActivity as DetailActivity) as T
-        } else if(modelClass.isAssignableFrom(CreateUpdateContactViewModel::class.java)) {
-            @Suppress("UNCHECKED_CAST")
+            modelClass.isAssignableFrom(CreateUpdateContactViewModel::class.java) -> @Suppress("UNCHECKED_CAST")
             return CreateUpdateContactViewModel(appCompatActivity as CreateUpdateContactActivity) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
-
     }
 }

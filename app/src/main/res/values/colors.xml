@@ -4,9 +4,5 @@
     <color name="colorPrimaryLight">#b064d0</color>
     <color name="colorPrimaryDark">#4e006f</color>
     <color name="colorAccent">#F77D27</color>
-    <color name="colorAccentLight">#ffae57</color>
-    <color name="colorAccentDark">#be4e00</color>
-    <color name="primaryTextColor">#ffffff</color>
-    <color name="accentTextColor">#ffffff</color>
     <color name="red">#F44336</color>
 </resources>

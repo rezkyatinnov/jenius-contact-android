@@ -15,7 +15,7 @@ import javax.inject.Inject as Inject1
  * Created by rezkyatinnov on 13/06/2019.
  */
 
-class CreateUpdateContactActivity : BaseActivity() {
+open class CreateUpdateContactActivity : BaseActivity() {
     @Inject1
     lateinit var viewModelFactory: ViewModelFactory
 
@@ -35,9 +35,11 @@ class CreateUpdateContactActivity : BaseActivity() {
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(CreateUpdateContactViewModel::class.java)
         binding.viewModel = viewModel
+    }
 
+    override fun onStart() {
+        super.onStart()
         initData()
-
     }
 
     fun initData(){

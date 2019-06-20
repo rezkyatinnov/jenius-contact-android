@@ -41,7 +41,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
                     android:orientation="vertical"
                     android:padding="@dimen/activity_horizontal_margin">
@@ -73,7 +73,9 @@
                             android:inputType="textUri"
                             android:textSize="18sp"
                             app:mutableText="@{viewModel.avatarMutable}"
-                            app:textChangedListener="@{viewModel.avatarTextChangeListener}" />
+                            app:textChangedListener="@{viewModel.avatarTextChangeListener}"
+                            android:importantForAutofill="no"
+                            tools:ignore="LabelFor,UnusedAttribute" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -95,6 +97,8 @@
                             android:imeOptions="actionNext"
                             android:inputType="textPersonName"
                             android:textSize="18sp"
+                            android:importantForAutofill="no"
+                            tools:ignore="LabelFor,UnusedAttribute"
                             app:mutableText="@{viewModel.firstnameMutable}"
                             app:textChangedListener="@{viewModel.firstnameTextChangeListener}" />
                     </LinearLayout>
@@ -118,6 +122,8 @@
                             android:imeOptions="actionNext"
                             android:inputType="textPersonName"
                             android:textSize="18sp"
+                            android:importantForAutofill="no"
+                            tools:ignore="LabelFor,UnusedAttribute"
                             app:mutableText="@{viewModel.lastnameMutable}"
                             app:textChangedListener="@{viewModel.lastnameTextChangeListener}" />
                     </LinearLayout>
@@ -140,6 +146,8 @@
                             android:layout_weight="1"
                             android:imeOptions="actionDone"
                             android:inputType="number"
+                            android:importantForAutofill="no"
+                            tools:ignore="LabelFor,UnusedAttribute"
                             android:textSize="18sp"
                             app:mutableText="@{viewModel.ageMutable}"
                             app:textChangedListener="@{viewModel.ageTextChangeListener}" />
@@ -163,7 +171,8 @@
                 android:layout_height="match_parent"
                 android:clickable="true"
                 android:gravity="center"
-                app:mutableVisibility="@{viewModel.loadingVisibility}">
+                app:mutableVisibility="@{viewModel.loadingVisibility}"
+                android:focusable="true">
 
                 <ProgressBar
                     android:id="@+id/progressBar"

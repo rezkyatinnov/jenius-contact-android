@@ -1,5 +1,6 @@
 package com.rezkyatinnov.jeniuscontact.restapi
 
+import com.rezkyatinnov.jeniuscontact.utils.BaseSchedulerProvider
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -11,10 +12,10 @@ import retrofit2.Response
  */
 
 object RestApi {
-     fun <T> call(disposable: CompositeDisposable, observable: Observable<Response<T>>, restSubscriber: RestSubscriber<T>){
+     fun <T> call(disposable: CompositeDisposable, observable: Observable<Response<T>>, restSubscriber: RestSubscriber<T>,schedulerProvider: BaseSchedulerProvider){
          disposable.add(observable
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(schedulerProvider.io())
+            .observeOn(schedulerProvider.ui())
             .doOnSubscribe { restSubscriber.onRestCallStart() }
             .doOnTerminate { restSubscriber.onRestCallFinish() }
             .subscribe(

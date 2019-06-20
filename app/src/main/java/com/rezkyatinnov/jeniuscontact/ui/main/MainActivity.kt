@@ -17,7 +17,7 @@ import javax.inject.Inject
  * Created by rezkyatinnov on 13/06/2019.
  */
 
-class MainActivity : BaseActivity() {
+open class MainActivity : BaseActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
 
@@ -32,10 +32,15 @@ class MainActivity : BaseActivity() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
         binding.viewModel = viewModel
 
-        fab.setOnClickListener { view ->
+        fab.setOnClickListener {
             val intent = Intent(this@MainActivity,CreateUpdateContactActivity::class.java)
             startActivityForResult(intent, IS_NEED_RELOAD)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.loadAllContact()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

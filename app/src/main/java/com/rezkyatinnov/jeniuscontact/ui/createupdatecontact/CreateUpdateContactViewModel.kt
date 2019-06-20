@@ -20,7 +20,7 @@ import okhttp3.Headers
  * Created by rezkyatinnov on 13/06/2019.
  */
 
-class CreateUpdateContactViewModel(var activity: CreateUpdateContactActivity) : BaseViewModel(activity),
+open class CreateUpdateContactViewModel(var activity: CreateUpdateContactActivity) : BaseViewModel(activity),
     RestSubscriber<ApiResponse<Void>> {
 
     var loadingVisibility = MutableLiveData<Int>()
@@ -33,6 +33,7 @@ class CreateUpdateContactViewModel(var activity: CreateUpdateContactActivity) : 
     var firstnameMutable = MutableLiveData<String>()
     var lastnameMutable = MutableLiveData<String>()
     var ageMutable = MutableLiveData<String>()
+    var contact = Contact()
 
     init {
         loadingVisibility.value = View.GONE
@@ -88,6 +89,10 @@ class CreateUpdateContactViewModel(var activity: CreateUpdateContactActivity) : 
 
     val onSaveClickListener = View.OnClickListener {
         if (isFormValid()) {
+            contact.firstName = firstname
+            contact.lastName = lastname
+            contact.age = age.toInt()
+            contact.photo = avatar.value
             saveContact()
         } else {
             MaterialDialog(activity).show {
@@ -99,94 +104,95 @@ class CreateUpdateContactViewModel(var activity: CreateUpdateContactActivity) : 
         }
     }
 
+    var preloadRestSubscriber = object : RestSubscriber<ApiResponse<Contact>> {
+        override fun onRestCallStart() {
+            loadingVisibility.value = View.VISIBLE
+        }
+
+        override fun onRestCallFinish() {
+            loadingVisibility.value = View.GONE
+        }
+
+        override fun onSuccess(headers: Headers, body: ApiResponse<Contact>?) {
+            loadingVisibility.value = View.GONE
+            avatarMutable.value = body!!.data!!.photo
+            avatar.value = body.data!!.photo
+            firstnameMutable.value = body.data!!.firstName
+            lastnameMutable.value = body.data!!.lastName
+            ageMutable.value = body.data!!.age.toString()
+        }
+
+        override fun onFailed(error: ErrorResponse) {
+            loadingVisibility.value = View.GONE
+            MaterialDialog(activity).show {
+                message(null, error.message)
+                positiveButton {
+                    dismiss()
+                    activity.finish()
+                }
+            }
+        }
+
+    }
+
     fun preloadContactData(id: String) {
         RestApi.call(
             disposables,
             apiServices.getContact(id),
-            object : RestSubscriber<ApiResponse<Contact>> {
-                override fun onRestCallStart() {
-                    loadingVisibility.value = View.VISIBLE
-                }
-
-                override fun onRestCallFinish() {
-                    loadingVisibility.value = View.GONE
-                }
-
-                override fun onSuccess(headers: Headers, body: ApiResponse<Contact>?) {
-                    loadingVisibility.value = View.GONE
-                    avatarMutable.value = body!!.data!!.photo
-                    avatar.value = body.data!!.photo
-                    firstnameMutable.value = body.data!!.firstName
-                    lastnameMutable.value = body.data!!.lastName
-                    ageMutable.value = body.data!!.age.toString()
-                }
-
-                override fun onFailed(error: ErrorResponse) {
-                    loadingVisibility.value = View.GONE
-                    MaterialDialog(activity).show {
-                        message(null, error.message)
-                        positiveButton {
-                            dismiss()
-                            activity.finish()
-                        }
-                    }
-                }
-
-            }
+            preloadRestSubscriber,
+            schedulerProvider
         )
     }
 
-    fun saveContact() {
-        val contact = Contact()
-        contact.firstName = firstname
-        contact.lastName = lastname
-        contact.age = age.toInt()
-        contact.photo = avatar.value
+    var updateRestSubscriber = object : RestSubscriber<ApiResponse<Contact>> {
+        override fun onRestCallStart() {
+            loadingVisibility.value = View.VISIBLE
+        }
 
+        override fun onRestCallFinish() {
+            loadingVisibility.value = View.GONE
+        }
+
+        override fun onSuccess(headers: Headers, body: ApiResponse<Contact>?) {
+            loadingVisibility.value = View.GONE
+            MaterialDialog(activity).show {
+                message(null, body!!.message)
+                positiveButton {
+                    val resultIntent = Intent()
+                    activity.setResult(Activity.RESULT_OK, resultIntent)
+                    activity.finish()
+                }
+                cancelOnTouchOutside(false)
+                cancelable(false)
+            }
+        }
+
+        override fun onFailed(error: ErrorResponse) {
+            loadingVisibility.value = View.GONE
+            MaterialDialog(activity).show {
+                message(null, error.message)
+                positiveButton {
+                    dismiss()
+                }
+            }
+        }
+
+    }
+
+    fun saveContact() {
         if (activity.isUpdate) {
             RestApi.call(
                 disposables,
                 apiServices.putContact(activity.id, contact),
-                object : RestSubscriber<ApiResponse<Contact>> {
-                    override fun onRestCallStart() {
-                        loadingVisibility.value = View.VISIBLE
-                    }
-
-                    override fun onRestCallFinish() {
-                        loadingVisibility.value = View.GONE
-                    }
-
-                    override fun onSuccess(headers: Headers, body: ApiResponse<Contact>?) {
-                        loadingVisibility.value = View.GONE
-                        MaterialDialog(activity).show {
-                            message(null, body!!.message)
-                            positiveButton {
-                                val resultIntent = Intent()
-                                activity.setResult(Activity.RESULT_OK, resultIntent)
-                                activity.finish()
-                            }
-                            cancelOnTouchOutside(false)
-                            cancelable(false)
-                        }
-                    }
-
-                    override fun onFailed(error: ErrorResponse) {
-                        loadingVisibility.value = View.GONE
-                        MaterialDialog(activity).show {
-                            message(null, error.message)
-                            positiveButton {
-                                dismiss()
-                            }
-                        }
-                    }
-
-                }
+                updateRestSubscriber,
+                schedulerProvider
             )
         } else {
             RestApi.call(
                 disposables,
                 apiServices.postContact(contact),
-                this
+                this,
+                schedulerProvider
             )
         }
     }

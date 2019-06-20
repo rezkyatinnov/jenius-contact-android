@@ -122,7 +122,8 @@
             android:layout_height="match_parent"
             android:clickable="true"
             android:gravity="center"
-            app:mutableVisibility="@{viewModel.loadingVisibility}">
+            app:mutableVisibility="@{viewModel.loadingVisibility}"
+            android:focusable="true">
 
             <ProgressBar
                 android:id="@+id/progressBar"
